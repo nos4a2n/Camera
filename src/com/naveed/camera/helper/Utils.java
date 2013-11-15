@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Locale;
  
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.database.Cursor;
@@ -15,7 +16,7 @@ import android.view.Display;
 import android.view.WindowManager;
 import android.widget.Toast;
  
-public class Utils{
+public class Utils extends Activity{
  
     private Context _context;
     
@@ -33,21 +34,26 @@ public class Utils{
         	filePaths.add(paths.get(i));
         }
  
-       //SQLiteDatabase db = openOrCreateDatabase("PictureDB", 0,
-		//		null);
-       // Cursor c = db.rawQuery("SELECT * FROM data4", null);
-		//c.moveToFirst();
-		//while(!c.isAfterLast()){
-			//String path = c.getString(c.getColumnIndex("P_path"));
-			//filePaths.add(path);
-			//c.moveToNext();
-		//}
-		//db.close();
-		
 		return filePaths;
         
         
     }
+     public ArrayList<String> getPictureData(String path){
+    	
+    	ArrayList<String> pictureData = new ArrayList<String>();
+ 		SQLiteDatabase db2 = openOrCreateDatabase("PictureDB", 0,
+ 				null);
+         Cursor c2 = db2.rawQuery("SELECT * FROM picData WHERE P_path = '" + path + "'", null);
+ 		c2.moveToFirst();
+ 		pictureData.add(c2.getString(c2.getColumnIndex("P_lat")));
+ 		pictureData.add(c2.getString(c2.getColumnIndex("P_lng")));
+ 		pictureData.add(c2.getString(c2.getColumnIndex("P_place")));
+ 		pictureData.add(c2.getString(c2.getColumnIndex("P_description")));
+ 		pictureData.add(c2.getString(c2.getColumnIndex("P_date")));
+ 		db2.close();
+ 		
+ 		return pictureData;
+     }
  
 
 	// Check supported file extensions

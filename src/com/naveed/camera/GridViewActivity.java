@@ -30,7 +30,7 @@ public class GridViewActivity extends Activity {
         
         SQLiteDatabase db = openOrCreateDatabase("PictureDB", 0,
 				null);
-        Cursor c = db.rawQuery("SELECT * FROM data4", null);
+        Cursor c = db.rawQuery("SELECT * FROM picData", null);
 		c.moveToFirst();
 		while(!c.isAfterLast()){
 			String path = c.getString(c.getColumnIndex("P_path"));

@@ -10,10 +10,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.widget.Toast;
 
 public class FullScreenViewActivity extends Activity{
 
-	private Utils utils;
 	private FullScreenImageAdapter adapter;
 	private ViewPager viewPager;
 	 ArrayList<String> pathHolder = new ArrayList<String>();
@@ -25,25 +25,23 @@ public class FullScreenViewActivity extends Activity{
 		
 		SQLiteDatabase db = openOrCreateDatabase("PictureDB", 0,
 						null);
-		        Cursor c = db.rawQuery("SELECT * FROM data4", null);
-				c.moveToFirst();
-				while(!c.isAfterLast()){
-					String path = c.getString(c.getColumnIndex("P_path"));
+		        Cursor cursor = db.rawQuery("SELECT * FROM picData", null);
+				cursor.moveToFirst();
+				while(!cursor.isAfterLast()){
+					String path = cursor.getString(cursor.getColumnIndex("P_path"));
 					pathHolder.add(path);
-					c.moveToNext();
+					cursor.moveToNext();
 				}
 				db.close();
 
 		viewPager = (ViewPager) findViewById(R.id.pager);
 
-		utils = new Utils(getApplicationContext());
 
 		Intent i = getIntent();
 		int position = i.getIntExtra("position", 0);
 
 		adapter = new FullScreenImageAdapter(FullScreenViewActivity.this,
-				utils.getFilePaths(pathHolder));
-
+				pathHolder, cursor);
 		viewPager.setAdapter(adapter);
 
 		// displaying selected image first

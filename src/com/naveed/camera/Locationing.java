@@ -1,10 +1,13 @@
 package com.naveed.camera;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -60,6 +63,7 @@ public class Locationing extends ListActivity implements
 	private String longitude = "";
 	private String selectedPlace = "";
 	private String description = "";
+	private String dateTime = "";
 
 	LocationClient locationClient;
 
@@ -95,6 +99,15 @@ public class Locationing extends ListActivity implements
 
 				selectedPlace = currentLoc.getText().toString();
 				description = descriptionBox.getText().toString();
+				
+				
+				File f = new File(path);
+				
+				Date date = new Date(f.lastModified());
+				SimpleDateFormat simpleDate = new SimpleDateFormat("cc, LLL d yyyy, h:m:sa");
+			
+				dateTime = simpleDate.format(date);
+				
 				storePictureData();
 				AlertDialog.Builder builder = new AlertDialog.Builder(
 						Locationing.this);
@@ -228,10 +241,10 @@ public class Locationing extends ListActivity implements
 
 		SQLiteDatabase db = openOrCreateDatabase("PictureDB", MODE_PRIVATE,
 				null);
-		db.execSQL("CREATE TABLE IF NOT EXISTS data4 (P_lat TEXT, P_lng TEXT, P_place TEXT, P_description TEXT, P_path TEXT);");
-		db.execSQL("INSERT INTO data4 VALUES ('" + latitude + "','"
+		db.execSQL("CREATE TABLE IF NOT EXISTS picData (P_lat TEXT, P_lng TEXT, P_place TEXT, P_description TEXT, P_path TEXT, P_date TEXT);");
+		db.execSQL("INSERT INTO picData VALUES ('" + latitude + "','"
 				+ longitude + "','" + selectedPlace + "','" + description
-				+ "','" + path + "');");
+				+ "','" + path + "','" + dateTime + "');");
 		db.close();
 	}
 

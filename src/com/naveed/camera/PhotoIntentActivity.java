@@ -30,6 +30,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -140,6 +141,7 @@ public class PhotoIntentActivity extends Activity{
 		Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
 
 		/* Associate the Bitmap to the ImageView */
+		
 		mImageView.setImageBitmap(bitmap);
 		mVideoUri = null;
 		mImageView.setVisibility(View.VISIBLE);
@@ -250,14 +252,8 @@ public class PhotoIntentActivity extends Activity{
 		setBtnListenerOrDisable(picBtn, mTakePicOnClickListener,
 				MediaStore.ACTION_IMAGE_CAPTURE);
 
-		Button picSBtn = (Button) findViewById(R.id.btnIntendS);
-		setBtnListenerOrDisable(picSBtn, mTakePicSOnClickListener,
-				MediaStore.ACTION_IMAGE_CAPTURE);
-
-		Button vidBtn = (Button) findViewById(R.id.btnIntendV);
-		setBtnListenerOrDisable(vidBtn, mTakeVidOnClickListener,
-				MediaStore.ACTION_VIDEO_CAPTURE);
-		Button gallery = (Button) findViewById(R.id.button1);
+		
+		ImageButton gallery = (ImageButton) findViewById(R.id.btnGallery);
 		
 		gallery.setOnClickListener(new View.OnClickListener() {
 			
@@ -274,17 +270,10 @@ public class PhotoIntentActivity extends Activity{
 		} else {
 			mAlbumStorageDirFactory = new BaseAlbumDirFactory();
 		}
-		
 		SQLiteDatabase db = openOrCreateDatabase("PictureDB", MODE_PRIVATE,
 				null);
-		Cursor c = db.rawQuery("SELECT * FROM data4", null);
-		c.moveToFirst();
-		while(!c.isAfterLast()){
-			Log.d("testing", c.getString(c.getColumnIndex("P_path")));
-			c.moveToNext();
-		}
+		db.execSQL("CREATE TABLE IF NOT EXISTS picData (P_lat TEXT, P_lng TEXT, P_place TEXT, P_description TEXT, P_path TEXT, P_date TEXT);");
 		db.close();
-		
 	}
 
 	@Override
